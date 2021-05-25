@@ -57,6 +57,10 @@ let topMovies = [
     res.json(topMovies);
   });
   
+  app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+  });
   
   // listen for requests
   app.listen(8080, () => {
