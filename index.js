@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const app = express(),
+    morgan = require('morgan');
 
 let topMovies = [
     {
@@ -44,6 +46,7 @@ let topMovies = [
     }
   ];
   
+  app.use(morgan('common'));
   // GET requests
   app.get('/', (req, res) => {
     res.send('Add /movies to the address above to get the top 10 best movies of all time and their directors!');
