@@ -1,5 +1,4 @@
 const express = require('express');
-const app = express();
 const app = express(),
     morgan = require('morgan');
 
@@ -47,6 +46,8 @@ let topMovies = [
   ];
   
   app.use(morgan('common'));
+
+  
   // GET requests
   app.get('/', (req, res) => {
     res.send('Add /movies to the address above to get the top 10 best movies of all time and their directors!');
@@ -60,12 +61,15 @@ let topMovies = [
     res.json(topMovies);
   });
   
+
+  //Error handling
   app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
   });
   
-  // listen for requests
+
+  // Listen for requests
   app.listen(8080, () => {
     console.log('Your app is listening on port 8080.');
   });
