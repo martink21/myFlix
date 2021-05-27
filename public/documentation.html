@@ -50,21 +50,21 @@
             </tr>
             <tr>
                 <td>Get details about a movie by title</td>
-                <td>/movies/[TITLE]</td>
+                <td>/movies/:title</td>
                 <td>GET</td>
                 <td>none</td>
                 <td>JSON object containing the detail of a movie</td>
             </tr>
             <tr>
                 <td>Get the genre of a movie by title</td>
-                <td>/movies/[TITLE]/genre</td>
+                <td>/movies/:title/:genre</td>
                 <td>GET</td>
                 <td>none</td>
                 <td>JSON object containing the genre of a movie</td>
             </tr>
             <tr>
                 <td>Get details about a director</td>
-                <td>directors/[NAME]</td>
+                <td>/movies/:director</td>
                 <td>GET</td>
                 <td>none</td>
                 <td>JSON object containing details about a director</td>
@@ -78,28 +78,28 @@
             </tr>
             <tr>
                 <td>Edit user details</td>
-                <td>users/edit/[NAME]</td>
-                <td>POST</td>
+                <td>users/:name</td>
+                <td>PUT</td>
                 <td>JSON object containing changed details about the user</td>
                 <td>Message for successfull change of details</td>
             </tr>
             <tr>
                 <td>Add movies to Favourites</td>
-                <td>users/[NAME]/favourites</td>
+                <td>users/:name/favourites</td>
                 <td>POST</td>
                 <td>JSON object containing movies to be added to favourites</td>
                 <td>Message for successfull addition of movies to favourites</td>
             </tr>
             <tr>
                 <td>Remove movies from Favourites</td>
-                <td>users/[NAME]/favourites</td>
+                <td>users/:name/favourites</td>
                 <td>DELETE</td>
                 <td>JSON object containing movies to be removed from favourites</td>
                 <td>Message for successfull removing of movies from favourites</td>
             </tr>
             <tr>
                 <td>Deregister users</td>
-                <td>users/[NAME]</td>
+                <td>users/:name</td>
                 <td>DELETE</td>
                 <td>none</td>
                 <td>Message for successfull deregistering of user</td>
