@@ -2,7 +2,19 @@ const express = require('express');
 const app = express(),
     morgan = require('morgan');
 
-let users = [];
+let users = [
+    {
+      name: 'John Smith',
+      age: 20,
+      username: 'johnsmith'
+    },
+    {
+      name: 'Mary Lane',
+      age: 50,
+      username: 'marylane'
+    }
+
+];
 let topMovies = [
     {
       title: 'Psycho',
@@ -71,29 +83,20 @@ let topMovies = [
   // please note the genres of the movies are not yet included 
   // the below is just for the purposes of the exercise
   // genres will be included in the external database 
-  app.get('/movies/:title/:genre', (req, res) => {
+  app.get('/movies/:title/genre', (req, res) => {
     res.send('JSON object containing the title and the genre of the movie');
   });
 
   // please not the bio of the directors are not yet included
   // the below is just for the purposes of the exercise
   // bios will be included in the external database 
-  app.get('/movies/:title/:director', (req, res) => {
-    res.json("JSON object containing the name of the director and his bio");
+  app.get('/movies/:title/director', (req, res) => {
+    res.json('JSON object containing the name of the director and his bio');
   });
 
   // register a new user
   app.post('/users/register', (req, res) => {
-    let newUser = req.body;
-  
-    if (!newUser.name) {
-      const message = 'Missing name in request body';
-      res.status(400).send(message);
-    } else {
-      newUser.id = uuid.v4();
-      users.push(newUser);
-      res.status(201).send(newUser);
-    }
+    res.json('JSON object containing details about the newly registered user')
   });
 
   // edit the details of a user
@@ -116,7 +119,7 @@ let topMovies = [
   
   // delete users
   // example only
-  app.delete('users/:name', (req, res) => {
+  app.delete('/users', (req, res) => {
     res.send('Message for successfull deregistering of a user')
   });  
   
@@ -125,7 +128,7 @@ let topMovies = [
     console.error(err.stack);
     res.status(500).send('Something broke!');
   });
-  
+
   // Listen for requests
   app.listen(8080, () => {
     console.log('Your app is listening on port 8080.');
