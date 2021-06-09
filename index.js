@@ -16,6 +16,11 @@ const morgan = require('morgan');
 const passport = require('passport');
 require('./passport');
 
+const port = process.env.port || 8080;
+app.listen(port, () => {
+console.log('Your app is listening on port ${port}');
+});
+
 app.use(bodyParser.json());
 
 let auth = require('./auth')(app);
