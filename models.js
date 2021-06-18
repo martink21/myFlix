@@ -49,8 +49,5 @@ let genreSchema = mongoose.Schema({
   let Genre = mongoose.model ('Genre', genreSchema);
   let Director = mongoose.model ('Director', directorSchema);
   
-  module.exports.Movie = Movie;
-  module.exports.User = User;
-  module.exports.Genre = Genre;
-  module.exports.Director = Director;
+  module.exports = { Movie, User, Genre, Director}
 
