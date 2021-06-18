@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
 const Models = require('./models.js');
 
-const Movies = Models.Movie;
-const Users = Models.User;
-const Genres = Models.Genre;
-const Directors = Models.Director;
+const { Movie, User, Genre, Director } = Models;
 
 /* mongoose.connect('mongodb://localhost:27017/myFlixDB', 
 { useNewUrlParser: true, useUnifiedTopology: true }); */
@@ -20,7 +17,7 @@ require('./passport');
 
 app.use(bodyParser.json());
 
-let auth = require('./auth')(app);
+require('./auth')(app);
 
 app.use(morgan('common'));
 
@@ -52,7 +49,7 @@ const { check, validationResult } = require('express-validator');
   
   // Get a list of all movies
   app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Movies.find()
+    Movie.find()
       .then((movies) => {
         res.status(200).json(movies);
       })
@@ -64,7 +61,7 @@ const { check, validationResult } = require('express-validator');
 
   // Get a movie by its title
   app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Movies.findOne({ Title: req.params.Title })
+    Movie.findOne({ Title: req.params.Title })
     .then((movie) => {
       res.status(200).json(movie);
     })
@@ -76,7 +73,7 @@ const { check, validationResult } = require('express-validator');
 
   // Get the genre description by its name
   app.get('/genre/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Genres.findOne({Name: req.params.Name})
+    Genre.findOne({Name: req.params.Name})
     .then((genre) => {
       res.status(200).json(genre.Description)
     })
@@ -88,7 +85,7 @@ const { check, validationResult } = require('express-validator');
 
   // Get director info by director name
   app.get('/directors/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Directors.findOne({Name: req.params.Name})
+    Director.findOne({Name: req.params.Name})
     .then((director) => {
       res.status(200).json(director)
     })
@@ -114,14 +111,14 @@ const { check, validationResult } = require('express-validator');
       return res.status(422).json({ errors: errors.array() });
     }
 
-    const hashedPassword = Users.hashPassword(req.body.Password);
-    Users.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
+    const hashedPassword = User.hashPassword(req.body.Password);
+    User.findOne({ Username: req.body.Username }) // Search to see if a user with the requested username already exists
       .then((user) => {
         if (user) {
           //If the user is found, send a response that it already exists
           return res.status(400).send(req.body.Username + ' already exists');
         } else {
-          Users
+          User
             .create({
               Username: req.body.Username,
               Password: hashedPassword,
@@ -143,7 +140,7 @@ const { check, validationResult } = require('express-validator');
 
  // Edit a user
   app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Users.findOneAndUpdate(
+    User.findOneAndUpdate(
       {Username: req.params.Username},
       {
         $set: {
@@ -167,7 +164,7 @@ const { check, validationResult } = require('express-validator');
   
 // Add a movie to a user's list of favorites
 app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Users.findOneAndUpdate({ Username: req.params.Username }, {
+  User.findOneAndUpdate({ Username: req.params.Username }, {
      $push: { FavoriteMovies: req.params.MovieID }
    },
    { new: true }, // This line makes sure that the updated document is returned
@@ -183,7 +180,7 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { sess
   
   // Remove movies from favorites
   app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Users.findOneAndUpdate({ Username: req.params.Username }, {
+    User.findOneAndUpdate({ Username: req.params.Username }, {
        $pull: { FavoriteMovies: req.params.MovieID }
      },
      { new: true }, // This line makes sure that the updated document is returned
@@ -199,7 +196,7 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { sess
   
   // Delete users
   app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
-    Users.findOneAndRemove( {Username: req.params.Username} )
+    User.findOneAndRemove( {Username: req.params.Username} )
     .then((user) => {
       if(!user) {
         res.status(400).send(req.params.Username + " was not found")
