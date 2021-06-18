@@ -54,7 +54,7 @@ const { check, validationResult } = require('express-validator');
   app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find()
       .then((movies) => {
-        res.status(201).json(movies);
+        res.status(200).json(movies);
       })
       .catch((err) => {
         console.error(err);
@@ -66,7 +66,7 @@ const { check, validationResult } = require('express-validator');
   app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.findOne({ Title: req.params.Title })
     .then((movie) => {
-      res.status(201).json(movie);
+      res.status(200).json(movie);
     })
       .catch((err) => {
         console.error(err);
@@ -78,7 +78,7 @@ const { check, validationResult } = require('express-validator');
   app.get('/genre/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
     Genres.findOne({Name: req.params.Name})
     .then((genre) => {
-      res.status(201).json(genre.Description)
+      res.status(200).json(genre.Description)
     })
     .catch((err) => {
       console.error(err);
@@ -90,7 +90,7 @@ const { check, validationResult } = require('express-validator');
   app.get('/directors/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
     Directors.findOne({Name: req.params.Name})
     .then((director) => {
-      res.status(201).json(director)
+      res.status(200).json(director)
     })
     .catch((err) => {
       console.error(err);
