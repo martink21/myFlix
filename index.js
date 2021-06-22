@@ -48,7 +48,9 @@ const { check, validationResult } = require('express-validator');
   });
   
   // Get a list of all movies
-  app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
+  app.get('/movies', 
+  //passport.authenticate('jwt', { session: false }), 
+  (req, res) => {
     Movie.find()
       .then((movies) => {
         res.status(200).json(movies);
