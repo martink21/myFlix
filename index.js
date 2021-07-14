@@ -15,13 +15,16 @@ const morgan = require('morgan');
 const passport = require('passport');
 require('./passport');
 
+const cors = require('cors');
+app.use(cors());
+
 app.use(bodyParser.json());
 
 require('./auth')(app);
 
 app.use(morgan('common'));
 
-app.use(cors());
+
 
 // const cors = require('cors');
 // let allowedOrigins = ['http://localhost:8080', 'http://testsite.com', 'http://localhost:1234'];
