@@ -103,7 +103,7 @@ const { check, validationResult } = require('express-validator');
 
   // GET all users
 app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Users.find()
+  User.find()
     .then((users) => {
       res.status(201).json(users);
     })
@@ -115,7 +115,7 @@ app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) =
 
 // GET by username
 app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
-  Users.findOne({ Username: req.params.Username })
+  User.findOne({ Username: req.params.Username })
     .then((user) => {
       res.json(user);
     })
