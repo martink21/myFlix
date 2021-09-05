@@ -65,6 +65,20 @@ const { check, validationResult } = require('express-validator');
       });
   });
 
+   // Get a list of user's favorite movies
+   app.get('/users/:Username/movies', passport.authenticate('jwt', { session: false }), 
+   (req, res) => {
+     User.findOne( { Username: req.params.Username } )
+       .then((movies) => {
+         res.status(200).json(movies);
+       })
+       .catch((err) => {
+         console.error(err);
+         res.status(500).send('Error: ' + err);
+       });
+   });
+
+
   // Get a movie by its title
   app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movie.findOne({ Title: req.params.Title })
