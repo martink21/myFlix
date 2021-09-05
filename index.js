@@ -69,8 +69,8 @@ const { check, validationResult } = require('express-validator');
    app.get('/users/:Username/movies', passport.authenticate('jwt', { session: false }), 
    (req, res) => {
      User.findOne( { Username: req.params.Username } )
-       .then((movies) => {
-         res.status(200).json(movies);
+       .then((user) => {
+         res.status(200).json(user.FavoriteMovies);
        })
        .catch((err) => {
          console.error(err);
