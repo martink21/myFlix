@@ -5,6 +5,11 @@ const { Movie, User, Genre, Director } = Models;
 
 /* mongoose.connect('mongodb://localhost:27017/myFlixDB', 
 { useNewUrlParser: true, useUnifiedTopology: true }); */
+
+/** @function
+ * @name databaseConnect
+ * @description Create promise to connect to the database
+ */
 mongoose.connect( process.env.CONNECTION_URI, 
   { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -44,6 +49,11 @@ const { check, validationResult } = require('express-validator');
 
   // GET requests
 
+  /** @function
+ * @name welcomeUser
+ * @description Welcome the user to the API
+ * @returns {string} - Welcome message to the user
+ */
   app.get('/', (req, res) => {
     res.send('Welcome!');
   });
@@ -52,7 +62,11 @@ const { check, validationResult } = require('express-validator');
     res.sendFile('public/documentation.html', { root: __dirname });
   });
   
-  // Get a list of all movies
+  /** @function
+ * @name getMovies
+ * @description Return a list of all movies to the user
+ * @returns {json} moviesQueried - All movies from database
+ */
   app.get('/movies', passport.authenticate('jwt', { session: false }), 
   (req, res) => {
     Movie.find()
@@ -78,8 +92,12 @@ const { check, validationResult } = require('express-validator');
        });
    });
 
-
-  // Get a movie by its title
+  /** @function
+ * @name getMovie
+ * @description Return data about a single movie by ID to the user
+ * @param {string} id - The movie's ID
+ * @returns {json} movieQueried - Single movie from database
+ */
   app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movie.findOne({ Title: req.params.Title })
     .then((movie) => {
@@ -91,7 +109,12 @@ const { check, validationResult } = require('express-validator');
       });    
   });
 
-  // Get the genre description by its name
+  /** @function
+ * @name getGenre
+ * @description Return data about a movie genre by ID
+ * @param {string} id - The genre's ID
+ * @returns {json} genreQueried - Single movie genre from database
+ */
   app.get('/genre/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
     Genre.findOne({Name: req.params.Name})
     .then((genre) => {
@@ -103,7 +126,12 @@ const { check, validationResult } = require('express-validator');
     })
   });
 
-  // Get director info by director name
+  /** @function
+ * @name getDirector
+ * @description Return data about a director by ID
+ * @param {string} id - The director's ID
+ * @returns {json} directorQueried - Single movie director from database
+ */
   app.get('/directors/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
     Director.findOne({Name: req.params.Name})
     .then((director) => {
@@ -115,7 +143,11 @@ const { check, validationResult } = require('express-validator');
     })
   });
 
-  // GET all users
+ /** @function
+ * @name getUsers
+ * @description Allow an Admin to view all registered users in the database
+ * @returns {json} usersQueried - All users from database
+ */
 app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
   User.find()
     .then((users) => {
@@ -127,7 +159,12 @@ app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) =
     });
 });
 
-// GET by username
+/** @function
+ * @name getUser
+ * @description View a registered user in the database by username
+ * @param {string} username - The user's username
+ * @returns {json} userQueried - Single user from database
+ */
 app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
   User.findOne({ Username: req.params.Username })
     .then((user) => {
@@ -139,7 +176,12 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (r
     });
 });
 
-  // Register a new user
+  /** @function
+ * @name registerUser
+ * @description Register a new user in the database
+ * @param {object} - New user registration data
+ * @returns {json} userQueried - Response with the new registered user's data
+ */
   app.post('/users',
   [
     check('Username', 'Username is required').isLength({min: 5}),
@@ -182,7 +224,13 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (r
       });
   });
 
- // Edit a user
+ /** @function
+ * @name updateUser
+ * @description Update user's data by username
+ * @param {object} - New updated user data
+ * @param {string} username - The user's username
+ * @returns {json} userQueried - Response with the new updated user data
+ */
   app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
     User.findOneAndUpdate(
       {Username: req.params.Username},
@@ -206,7 +254,13 @@ app.get('/users/:Username', passport.authenticate('jwt', { session: false }), (r
     );
 });
   
-// Add a movie to a user's list of favorites
+/** @function
+ * @name addFavoriteMovie
+ * @description Add a movie to the Favorites list by movie ID
+ * @param {string} username - The user's username
+ * @param {string} movie_id - The movie's ID
+ * @returns {json} userQueried - Response with the confirmation of the added film
+ */
 app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
   User.findOneAndUpdate({ Username: req.params.Username }, {
      $push: { FavoriteMovies: req.params.MovieID }
@@ -222,7 +276,13 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { sess
   });
 });
   
-  // Remove movies from favorites
+ /** @function
+ * @name deleteFavoriteMovie
+ * @description Delete a movie from the Favorites list by movie ID
+ * @param {string} username - The user's username
+ * @param {string} movie_id - The movie's ID
+ * @returns {json} userQueried - Response with the confirmation of the deleted film
+ */
   app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
     User.findOneAndUpdate({ Username: req.params.Username }, {
        $pull: { FavoriteMovies: req.params.MovieID }
@@ -238,7 +298,12 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { sess
     });
   });
   
-  // Delete users
+  /** @function
+ * @name deleteUser
+ * @description Delete a user from the database by username
+ * @param {string} username - The user's username
+ * @returns {string} - Response with the confirmation of the user's deletion
+ */
   app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
     User.findOneAndRemove( {Username: req.params.Username} )
     .then((user) => {
@@ -254,13 +319,19 @@ app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { sess
     });
   });
   
-  //Error handling
+  /** @function
+ * @name errorHandler
+ * @description Handle errors
+ */
   app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something broke!');
   });
 
-  // Listen for requests
+ /** @function
+ * @name portListener
+ * @description Port listener for development environment
+ */
   const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0',() => {
  console.log('Listening on Port ' + port);
