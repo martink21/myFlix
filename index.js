@@ -78,8 +78,12 @@ const { check, validationResult } = require('express-validator');
        });
    });
 
-
-  // Get a movie by its title
+ /** @function
+ * @name getMovieByTitle
+ * @description Return data about a movie genre by ID
+ * @param {string} id - The genre's ID
+ * @returns {json} genreQueried - Single movie genre from database
+ */
   app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movie.findOne({ Title: req.params.Title })
     .then((movie) => {
@@ -91,7 +95,31 @@ const { check, validationResult } = require('express-validator');
       });    
   });
 
-  // Get the genre description by its name
+ /** @function
+ * @name getMovieById
+ * @description Return data about a movie genre by ID
+ * @param {string} id - The genre's ID
+ * @returns {json} genreQueried - Single movie genre from database
+ */
+
+  app.get('/movies/:Id', passport.authenticate('jwt', { session: false }), (req, res) => {
+    Movie.findById(req.params.Id)
+    .then((movie) => {
+      res.status(200).json(movie);
+    })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send('Error:' + err);
+      });    
+  });
+
+  /** @function
+ * @name getGenre
+ * @description Return data about a movie genre by ID
+ * @param {string} id - The genre's ID
+ * @returns {json} genreQueried - Single movie genre from database
+ */
+
   app.get('/genre/:Name', passport.authenticate('jwt', { session: false }), (req, res) => {
     Genre.findOne({Name: req.params.Name})
     .then((genre) => {
