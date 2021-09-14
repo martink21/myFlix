@@ -102,7 +102,7 @@ const { check, validationResult } = require('express-validator');
  * @returns {json} genreQueried - Single movie genre from database
  */
 
-  app.get('/movies/:Id', passport.authenticate('jwt', { session: false }), (req, res) => {
+  app.get('/movies/id/:Id', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movie.findById(req.params.Id)
     .then((movie) => {
       res.status(200).json(movie);
